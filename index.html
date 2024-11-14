@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Anniversary!</title>
+    <style>
+        /* Mengubah background menjadi gambar foto */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            background-image: url('background.jpg'); /* Ganti 'background.jpg' dengan nama file gambar Anda */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Card styling */
+        .anniversary-card, .message-card {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            padding: 20px;
+            text-align: center;
+            line-height: 1.6;
+            z-index: 1;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background-color: #ff66b2;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            margin: 15px 10px 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #ff3399;
+        }
+
+        /* Photo gallery styling */
+        .photo-gallery {
+            display: none;
+            max-width: 90%;
+            overflow-y: auto;
+            margin-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        /* Responsive grid layout for photos */
+        .photo-gallery img {
+            width: 100%;
+            max-width: 250px;
+            height: 250px;
+            object-fit: cover;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        /* Responsive styling */
+        @media (min-width: 600px) {
+            .photo-gallery {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Hidden section styling */
+        .hidden {
+            display: none;
+        }
+
+        /* Message area styling */
+        .message-area {
+            margin-top: 20px;
+        }
+
+        .message-area textarea {
+            width: 100%;
+            max-width: 500px;
+            height: 100px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #ff66b2;
+            resize: none;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+        }
+
+        .saved-message {
+            margin-top: 15px;
+            color: #ff66b2;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Music -->
+    <audio autoplay loop>
+        <source src="your-song.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <!-- Main Anniversary Card -->
+    <div class="anniversary-card" id="anniversaryCard">
+        <h1>Happy Anniversary!</h1>
+        <p>Hepi eniperseri yang ke 5 hehehe.... Ga kerasa udah 5 tahun aja kita. Banyak banget kan yang udah dilewatin.</p>
+        <p>Iya, aku sadar kok kalau aku emang rada cuek. Bukan berarti aku nggak sayang, aku cuma lagi fokus buat kita ke depannya. Hectic banget tapi ya harus dihadapin. Hehehe.</p>
+        <p>Yaudah, gitu dulu deh buat 5 tahun ini. My wishy yang terbaik buat kita nanti ke depannya. Semoga juga impian aku nikah di umur 25 dan punya 1 Milyar pertama di umur 25 bisa tercapai. Dan buat kamu, pokoknya semangat hadapin aja semuanya ya hehehe. Dah gitu aja.</p>
+        <p>Happy aniv yang ke 5 yaa - Borokokok -</p>
+        
+        <!-- Button to view photo memories -->
+        <button class="btn" onclick="togglePhotos()">Lihat Foto Kenangan</button>
+        
+        <!-- Photo gallery for memories -->
+        <div class="photo-gallery" id="photoGallery">
+            <img src="images/photo1.jpg" alt="Memory 1">
+            <img src="images/photo2.jpg" alt="Memory 2">
+            <img src="images/photo3.jpg" alt="Memory 3">
+            <img src="images/photo4.jpg" alt="Memory 4">
+            <img src="images/photo5.jpg" alt="Memory 5">
+            <img src="images/photo6.jpg" alt="Memory 6">
+            <img src="images/photo7.jpg" alt="Memory 7">
+            <img src="images/photo8.jpg" alt="Memory 8">
+            <img src="images/photo9.jpg" alt="Memory 9">
+            <img src="images/photo10.jpg" alt="Memory 10">
+        </div>
+
+        <!-- Button to navigate to message page -->
+        <button class="btn" onclick="showMessage()">Tulis Pesanmu</button>
+    </div>
+
+    <!-- Message Card (hidden initially) -->
+    <div class="message-card hidden" id="messageCard">
+        <h1>Pesan Ucapan</h1>
+        
+        <!-- Message input area -->
+        <div class="message-area">
+            <textarea id="userMessage" placeholder="Tulis pesanmu di sini..."></textarea>
+            <br>
+            <button class="btn" onclick="saveMessage()">Simpan Pesan</button>
+        </div>
+        
+        <!-- Display saved message -->
+        <div class="saved-message" id="savedMessage">
+            <!-- Pesan yang disimpan akan ditampilkan di sini -->
+        </div>
+        
+        <!-- Back button -->
+        <button class="btn" onclick="goBack()">Kembali ke Halaman Utama</button>
+    </div>
+
+    <script>
+        // Fungsi untuk menampilkan atau menyembunyikan galeri foto
+        function togglePhotos() {
+            const gallery = document.getElementById('photoGallery');
+            if (gallery.style.display === 'flex' || gallery.style.display === 'block') {
+                gallery.style.display = 'none';
+            } else {
+                gallery.style.display = window.innerWidth >= 600 ? 'flex' : 'block';
+            }
+        }
+
+        // Fungsi untuk menampilkan halaman pesan
+        function showMessage() {
+            document.getElementById('anniversaryCard').classList.add('hidden');
+            document.getElementById('messageCard').classList.remove('hidden');
+            displaySavedMessage();
+        }
+
+        // Fungsi untuk kembali ke halaman utama
+        function goBack() {
+            document.getElementById('messageCard').classList.add('hidden');
+            document.getElementById('anniversaryCard').classList.remove('hidden');
+        }
+
+        // Fungsi untuk menyimpan pesan ke localStorage
+        function saveMessage() {
+            const message = document.getElementById('userMessage').value.trim();
+            if (message) {
+                localStorage.setItem('anniversaryMessage', message);
+                displaySavedMessage();
+                document.getElementById('userMessage').value = '';
+            } else {
+                alert('Silakan tulis pesan sebelum menyimpan.');
+            }
+        }
+
+        // Fungsi untuk menampilkan pesan yang disimpan
+        function displaySavedMessage() {
+            const savedMessage = localStorage.getItem('anniversaryMessage');
+            if (savedMessage) {
+                document.getElementById('savedMessage').textContent = `Pesanmu: ${savedMessage}`;
+            } else {
+                document.getElementById('savedMessage').textContent = 'Belum ada pesan yang disimpan.';
+            }
+        }
+
+        // Menampilkan pesan yang disimpan saat halaman dimuat
+        window.onload = function() {
+            displaySavedMessage();
+        };
+    </script>
+</body>
+</html>
